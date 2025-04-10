@@ -3,9 +3,10 @@ VAR Bullet = UNICHAR(9679)
 VAR RegionCode = [Region]
 VAR RegionText = [RegionName]
 VAR GrantCount = [TotalGrants]
-VAR MinimumSpacing = 30 // Adjust this number as needed
-VAR CurrentLength = LEN(Bullet) + 1 + LEN(RegionCode) + LEN(FORMAT(GrantCount, "0"))
-VAR PaddingLength = MAX(0, MinimumSpacing - CurrentLength)
-VAR Padding = REPT(" ", PaddingLength)
+VAR MaximumWidth = 50 // Adjust this value based on your visual's width and font
+VAR TextPart = Bullet & " " & RegionCode
+VAR NumberPart = FORMAT(GrantCount, "0")
+VAR NeededPadding = MaximumWidth - LEN(TextPart) - LEN(NumberPart)
+VAR Padding = REPT(UNICHAR(160), MAX(0, NeededPadding)) // Using non-breaking spaces for better alignment
 RETURN
-Bullet & " " & RegionCode & Padding & FORMAT(GrantCount, "0") & UNICHAR(10) & "  " & RegionText
+TextPart & Padding & NumberPart & UNICHAR(10) & "  " & RegionText
