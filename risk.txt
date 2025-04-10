@@ -1,9 +1,11 @@
 FormattedLabel =
 VAR Bullet = UNICHAR(9679)
-VAR RegionCode = [RegionLegend]
+VAR RegionCode = [Region]
 VAR RegionText = [RegionName]
 VAR GrantCount = [TotalGrants]
-VAR PaddingLength = 40 - LEN(Bullet) - 1 - LEN(RegionCode) - LEN(FORMAT(GrantCount, "0"))
+VAR MinimumSpacing = 30 // Adjust this number as needed
+VAR CurrentLength = LEN(Bullet) + 1 + LEN(RegionCode) + LEN(FORMAT(GrantCount, "0"))
+VAR PaddingLength = MAX(0, MinimumSpacing - CurrentLength)
 VAR Padding = REPT(" ", PaddingLength)
 RETURN
 Bullet & " " & RegionCode & Padding & FORMAT(GrantCount, "0") & UNICHAR(10) & "  " & RegionText
