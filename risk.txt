@@ -1,0 +1,8 @@
+FormattedLabel =
+VAR Bullet = UNICHAR(9679)
+VAR RegionCode = [RegionLegend]
+VAR RegionText = [RegionName]
+VAR GrantCount = [TotalGrants]
+VAR Padding = REPT(" ", 40 - LEN(RegionCode) - LEN(FORMAT(GrantCount, "0")))
+RETURN
+Bullet & " " & RegionCode & Padding & FORMAT(GrantCount, "0") & UNICHAR(10) & "  " & RegionText
