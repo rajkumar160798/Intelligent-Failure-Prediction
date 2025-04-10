@@ -1,22 +1,7 @@
-FormattedLabel =
-VAR Bullet = UNICHAR(9679)
-VAR RegionCode = [Region]
-VAR RegionText = [RegionName]
-VAR GrantCount = [TotalGrants]
-VAR MaximumWidth = 50 // Adjust this value based on your visual's width and font
-VAR TextPart = Bullet & " " & RegionCode
-VAR NumberPart = FORMAT(GrantCount, "0")
-VAR NeededPadding = MaximumWidth - LEN(TextPart) - LEN(NumberPart)
-VAR Padding = REPT(UNICHAR(160), MAX(0, NeededPadding)) // Using non-breaking spaces for better alignment
-RETURN
-TextPart & Padding & NumberPart & UNICHAR(10) & "  " & RegionText
-
-
-
----- v2:
+---- v1:
 
 FormattedLabel =
-VAR Bullet = UNICHAR(9679)
+VAR Bullet = UNICHAR(11044)
 VAR RegionCode = [Region]
 VAR RegionText = [RegionName]
 VAR GrantCount = [TotalGrants]
@@ -25,4 +10,31 @@ VAR NumberPart = FORMAT(GrantCount, "0")
 VAR PaddingTop = REPT(UNICHAR(160), MAX(0, MaximumWidth - LEN(Bullet) - 1 - LEN(RegionCode) - LEN(NumberPart)))
 VAR PaddingBottom = REPT(UNICHAR(160), LEN(Bullet) + 1) // Add padding to align with the bullet and space
 RETURN
-Bullet & " " & RegionCode & PaddingTop & NumberPart & UNICHAR(10) & PaddingBottom & RegionText
+Bullet & " " & RegionCode & PaddingTop & NumberPart & UNICHAR(10) & PaddingBottom & "  " & RegionText
+
+----v2:
+FormattedLabel =
+VAR RegionCode = [Region]
+VAR RegionText = [RegionName]
+VAR GrantCount = [TotalGrants]
+VAR MaximumWidth = 50
+VAR NumberPart = FORMAT(GrantCount, "0")
+
+// Color-coded bullet selection
+VAR Bullet =
+    SWITCH(
+        RegionCode,
+        "AFR", UNICHAR(128308),      // 🔴 red circle
+        "SAR", UNICHAR(128309),      // 🔵 blue circle
+        "EAP", UNICHAR(128994),      // 🟢 green circle
+        "ECA", UNICHAR(🟡128993),    // 🟡 yellow circle
+        "LAC", UNICHAR(🟠128992),    // 🟠 orange circle
+        "MENA", UNICHAR(128996),     // 🟣 purple circle
+        "Global", UNICHAR(11044)     // ⚫ default black dot
+    )
+
+VAR PaddingTop = REPT(UNICHAR(160), MAX(0, MaximumWidth - LEN(RegionCode) - LEN(NumberPart)))
+VAR PaddingBottom = REPT(UNICHAR(160), LEN(RegionCode)) // Align the name under code
+
+RETURN
+Bullet & " " & RegionCode & PaddingTop & NumberPart & UNICHAR(10) & PaddingBottom & "  " & RegionText
