@@ -3,6 +3,7 @@ VAR Bullet = UNICHAR(9679)
 VAR RegionCode = [RegionLegend]
 VAR RegionText = [RegionName]
 VAR GrantCount = [TotalGrants]
-VAR Padding = REPT(" ", 40 - LEN(RegionCode) - LEN(FORMAT(GrantCount, "0")))
+VAR PaddingLength = 40 - LEN(Bullet) - 1 - LEN(RegionCode) - LEN(FORMAT(GrantCount, "0"))
+VAR Padding = REPT(" ", PaddingLength)
 RETURN
-Bullet & " " & RegionCode & Padding & FORMAT(GrantCount, "0") & UNICHAR(10) & "  " & RegionText
+Bullet & " " & RegionCode & Padding & FORMAT(GrantCount, "0") & UNICHAR(10) & "  " & RegionText
