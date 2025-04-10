@@ -38,3 +38,37 @@ VAR PaddingBottom = REPT(UNICHAR(160), LEN(RegionCode)) // Align the name under 
 
 RETURN
 Bullet & " " & RegionCode & PaddingTop & NumberPart & UNICHAR(10) & PaddingBottom & "  " & RegionText
+
+
+
+FormattedLabel =
+VAR RegionCode = [Region]
+VAR RegionText = [RegionName]
+VAR GrantCount = [TotalGrants]
+VAR MaximumWidth = 50
+VAR NumberPart = FORMAT(GrantCount, "0")
+VAR TotalIdentifier = "Total" // Define the identifier for the total row
+
+// Color-coded bullet selection
+VAR Bullet =
+    SWITCH(
+        RegionCode,
+        "AFR", UNICHAR(128308),        // 🔴 red circle
+        "SAR", UNICHAR(128309),        // 🔵 blue circle
+        "EAP", UNICHAR(128994),        // 🟢 green circle
+        "ECA", UNICHAR(128993),        // 🟡 yellow circle
+        "LAC", UNICHAR(128992),        // 🟠 orange circle
+        "MENA", UNICHAR(128996),       // 🟣 purple circle
+        "Global", UNICHAR(11044),       // ⚫ default black dot
+        TotalIdentifier, UNICHAR(128300) // ✨ Bullet for Total
+    )
+
+VAR PaddingTop = REPT(UNICHAR(160), MAX(0, MaximumWidth - LEN(RegionCode) - LEN(NumberPart)))
+VAR PaddingBottom = REPT(UNICHAR(160), LEN(RegionCode)) // Align the name under code
+
+RETURN
+IF(
+    RegionCode = TotalIdentifier,
+    TotalIdentifier & REPT(UNICHAR(160), MaximumWidth - LEN(TotalIdentifier) - LEN(NumberPart)) & NumberPart,
+    Bullet & " " & RegionCode & PaddingTop & NumberPart & UNICHAR(10) & PaddingBottom & "  " & RegionText
+)
