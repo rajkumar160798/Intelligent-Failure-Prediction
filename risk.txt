@@ -10,3 +10,19 @@ VAR NeededPadding = MaximumWidth - LEN(TextPart) - LEN(NumberPart)
 VAR Padding = REPT(UNICHAR(160), MAX(0, NeededPadding)) // Using non-breaking spaces for better alignment
 RETURN
 TextPart & Padding & NumberPart & UNICHAR(10) & "  " & RegionText
+
+
+
+---- v2:
+
+FormattedLabel =
+VAR Bullet = UNICHAR(9679)
+VAR RegionCode = [Region]
+VAR RegionText = [RegionName]
+VAR GrantCount = [TotalGrants]
+VAR MaximumWidth = 50 // Adjust this value based on your visual's width and font
+VAR NumberPart = FORMAT(GrantCount, "0")
+VAR PaddingTop = REPT(UNICHAR(160), MAX(0, MaximumWidth - LEN(Bullet) - 1 - LEN(RegionCode) - LEN(NumberPart)))
+VAR PaddingBottom = REPT(UNICHAR(160), LEN(Bullet) + 1) // Add padding to align with the bullet and space
+RETURN
+Bullet & " " & RegionCode & PaddingTop & NumberPart & UNICHAR(10) & PaddingBottom & RegionText
