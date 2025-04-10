@@ -47,3 +47,35 @@ RETURN
         Bullet & SpaceAfterBullet & RegionCode & PaddingTop & NumberPart & UNICHAR(10) &
         PaddingBottom & "  " & RegionText
     )
+------
+
+    FormattedLabel =
+VAR RegionCode = [Region]
+VAR RegionText = [RegionName]
+VAR GrantCount = [TotalGrants]
+VAR MaxWidth = 45
+VAR NumberPart = FORMAT(GrantCount, "0")
+
+// Bullet colors per region
+VAR Bullet =
+    SWITCH(
+        RegionCode,
+        "AFR", UNICHAR(128308),      // 🔴 red
+        "SAR", UNICHAR(128309),      // 🔵 blue
+        "EAP", UNICHAR(128994),      // 🟢 green
+        "ECA", UNICHAR(128993),      // 🟡 yellow
+        "LAC", UNICHAR(128992),      // 🟠 orange
+        "MENA", UNICHAR(128996),     // 🟣 purple
+        "Global", UNICHAR(11044)     // ⚫ black
+    )
+
+// Add a bit more space between bullet and RegionCode
+VAR BulletSpace = REPT(UNICHAR(160), IF(RegionCode = "Global", 7, 6))
+
+// Right-align number with dynamic spacing
+VAR PaddingTop = REPT(UNICHAR(160), MAX(0, MaxWidth - LEN(RegionCode) - LEN(NumberPart)))
+VAR PaddingBottom = REPT(UNICHAR(160), LEN(RegionCode) + 1)
+
+RETURN
+Bullet & BulletSpace & RegionCode & PaddingTop & NumberPart
+& UNICHAR(10) & PaddingBottom & "  " & RegionText
