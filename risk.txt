@@ -39,14 +39,11 @@ VAR PaddingBottom = REPT(UNICHAR(160), LEN(RegionCode)) // Align the name under 
 RETURN
 Bullet & " " & RegionCode & PaddingTop & NumberPart & UNICHAR(10) & PaddingBottom & "  " & RegionText
 
-VAR PaddingBottom =
-    SWITCH(
-        RegionCode,
-        "AFR", REPT(UNICHAR(160), 9),
-        "SAR", REPT(UNICHAR(160), 9),
-        "EAP", REPT(UNICHAR(160), 9),
-        "ECA", REPT(UNICHAR(160), 9),
-        "LAC", REPT(UNICHAR(160), 9),
-        "MENA", REPT(UNICHAR(160), 10),
-        "Global", REPT(UNICHAR(160), 9)
+RETURN
+    IF(
+        RegionCode = "Global",
+        ExtraLeftPaddingGlobal & Bullet & SpaceAfterBullet & RegionCode & PaddingTop & NumberPart & UNICHAR(10) &
+        REPT(UNICHAR(160), LEN(RegionCode) + 1) & RegionText,
+        Bullet & SpaceAfterBullet & RegionCode & PaddingTop & NumberPart & UNICHAR(10) &
+        PaddingBottom & "  " & RegionText
     )
