@@ -79,3 +79,38 @@ VAR PaddingBottom = REPT(UNICHAR(160), LEN(RegionCode) + 1)
 RETURN
 Bullet & BulletSpace & RegionCode & PaddingTop & NumberPart
 & UNICHAR(10) & PaddingBottom & "  " & RegionText
+
+
+test 1
+
+FormattedLabel =
+VAR RegionCode = [Region]
+VAR RegionText = [RegionName]
+VAR GrantCount = [TotalGrants]
+VAR MaxWidth = 45
+VAR NumberPart = FORMAT(GrantCount, "0")
+
+// HTML bullet with custom color
+VAR Bullet =
+    SWITCH(
+        RegionCode,
+        "AFR", "<span style='color:#f1592d'>&#9679;</span>",        // Orange
+        "SAR", "<span style='color:#357ABD'>&#9679;</span>",        // Blue (unchanged)
+        "EAP", "<span style='color:#106350'>&#9679;</span>",        // Dark Green
+        "ECA", "<span style='color:#ba8f2c'>&#9679;</span>",        // Goldish
+        "LAC", "<span style='color:#E2A600'>&#9679;</span>",        // Yellow-Orange
+        "MENA", "<span style='color:#8a2e8f'>&#9679;</span>",       // Purple
+        "Global", ""                                                // No bullet
+    )
+
+// Add spacing
+VAR BulletSpace = REPT(UNICHAR(160), 2)
+
+// Line 1: Bullet + Code + Count
+VAR Line1 = Bullet & BulletSpace & RegionCode & " " & NumberPart
+
+// Line 2: Region Text (smaller using span)
+VAR Line2 = "<span style='font-size:11px;'>" & RegionText & "</span>"
+
+RETURN
+Line1 & UNICHAR(10) & Line2
